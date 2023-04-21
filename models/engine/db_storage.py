@@ -25,6 +25,8 @@ class DBStorage:
     __engine = None
     __session = None
 
+   
+   
     def __init__(self):
         """Instantiate a DBStorage object"""
         HBNB_MYSQL_USER = getenv('HBNB_MYSQL_USER')
@@ -40,6 +42,8 @@ class DBStorage:
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
 
+   
+   
     def all(self, cls=None):
         """query on the current database session"""
         new_dict = {}
@@ -51,19 +55,26 @@ class DBStorage:
                     new_dict[key] = obj
         return (new_dict)
 
+    
+    
     def new(self, obj):
         """add the object to the current database session"""
         self.__session.add(obj)
 
+    
+    
     def save(self):
         """commit all changes of the current database session"""
         self.__session.commit()
 
+    
+    
     def delete(self, obj=None):
         """delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(obj)
 
+    
     def reload(self):
         """reloads data from the database"""
         Base.metadata.create_all(self.__engine)
@@ -71,27 +82,23 @@ class DBStorage:
         Session = scoped_session(sess_factory)
         self.__session = Session
 
+    
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
 
+    
     def get(self, cls, id):
-        """
-        Retrieve one object
-        @cls: class name
-        @id: string representing the object ID
-        Return: Object based on the class name and its ID, or None if not found
-        """
-        obj = self.__session.query(cls).get(id)
-        if obj is None:
-            return None
-        return obj
-
+        """get"""
+        for value in models.storage.all(cls).values():
+            if value.id ==  id:
+                return value
+            
+        return None
+    
+    
     def count(self, cls=None):
-        """
-        Count the number of objects in storage:
-        @cls: class name
-        Return:
-        """
-        objs = self.all(cls)
-        return (len(objs))
+        """Returns the number of objects in storage matching the given class if no class is passed, returns the count of all objects in storage"""
+
+        return len(self.all(cls))
+
