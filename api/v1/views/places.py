@@ -113,7 +113,7 @@ def search(request):
         places = storage.all(Place)
         for p in places.values():
             places_list.append(p.to_dict())
-    if states is not None and len(states)  != 0:
+    if states is not None and len(states) is not 0:
         for id in states:
             get_cities = get_all(id, None).json
             for city in get_cities:
@@ -122,12 +122,12 @@ def search(request):
             places = do_get_places(id, None)
             for p in places.json:
                 places_list.append(p)
-    if cities is not None and len(cities) != 0:
+    if cities is not None and len(cities) is not 0:
         for id in cities:
             places = do_get_places(id, None)
             for p in places.json:
-                places_list.append(p) not
-    if amenities is not None and len(amenities) != 0:
+                places_list.append(p)
+    if amenities is not None and len(amenities) is not 0:
         for p in places_list:
             place_id = p.get('id')
             get_amenities = storage.get(Place, place_id)
